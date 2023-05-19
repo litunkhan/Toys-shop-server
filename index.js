@@ -32,6 +32,14 @@ async function run() {
     const toysCollections = client.db('toysdb').collection('toycollection')
 
 
+    app.get('/toys/:text',async(req,res)=>{
+      if(req.params.text=='science kits'||req.params.text=='engineering kits'||req.params.text=='math learning toys'){
+        const result = await toysCollections.find({Subcategory:req.params.text}).toArray()
+        return res.send(result)
+      }
+       
+       
+    })
     app.post('/toys', async(req,res)=>{
       const booking = req.body
       const result = await toysCollections.insertOne(booking)
