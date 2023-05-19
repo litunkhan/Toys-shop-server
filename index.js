@@ -40,6 +40,16 @@ async function run() {
        
        
     })
+
+   app.get('/mytoys',async(req,res)=>{
+    let query = {};
+    if (req.query?.email) {
+      query = { email: req.query.email }; 
+    }
+    const result = await toysCollections.find(query).toArray();
+    res.send(result);
+   })
+
     app.post('/toys', async(req,res)=>{
       const booking = req.body
       const result = await toysCollections.insertOne(booking)
