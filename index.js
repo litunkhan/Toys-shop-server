@@ -67,6 +67,12 @@ async function run() {
       const result = await toysCollections.insertOne(booking)
       res.send(result)
   })
+  app.delete('/mytoys/:id',async(req,res)=>{
+    const id = req.params.id
+    const query = {_id: new ObjectId(id)}
+    const result = await toysCollections.deleteOne(query)
+    res.send(result)
+  })
 
 
     await client.db("admin").command({ ping: 1 });
