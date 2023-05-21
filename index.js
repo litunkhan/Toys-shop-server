@@ -95,6 +95,22 @@ async function run() {
       const result = await toysCollections.insertOne(booking)
       res.send(result)
   })
+  app.put('/singledata/:id',async(req,res)=>{
+     const id = req.params.id
+     const user = req.body
+     const filter = {_id: new ObjectId(id)}
+     const options = {upsert:true}
+     const updatedUser ={
+       $set: {
+      price:user.price,
+      quantity:user.quantity,
+      details:user.details
+   },
+     }
+     const result = await toysCollections.updateOne(filter,updatedUser,options)
+     res.send(result)
+
+  })
   app.delete('/mytoys/:id',async(req,res)=>{
     const id = req.params.id
     const query = {_id: new ObjectId(id)}
