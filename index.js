@@ -21,13 +21,23 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxPoolSize: 10,
+
 });
 
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+    client.connect((error) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+    });
     // Send a ping to confirm a successful connection
     const toysCollections = client.db('toysdb').collection('toycollection')
 
@@ -60,6 +70,24 @@ async function run() {
     }
     const result = await toysCollections.find(query).toArray();
     res.send(result);
+   })
+
+   app.get('/sorting',async(req,res)=>{
+     const sort = req.query.sort
+     const email = req.query.email
+     let result;
+     if(sort==='asending'){
+      result = await toysCollections.find({email:email}).sort({price:1}).toArray()
+    
+     }
+     else if(sort==='desending'){
+       result = await toysCollections.find({email:email}).sort({price:-1}).toArray()
+     
+     }
+     
+    res.send(result);
+     
+
    })
 
     app.post('/toys', async(req,res)=>{
